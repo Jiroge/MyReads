@@ -1,7 +1,6 @@
 const api = "https://reactnd-books-api.udacity.com";
 
 let token = localStorage.token;
-
 if (!token) token = localStorage.token = Math.random().toString(36).substr(-8);
 
 const headers = {
@@ -9,11 +8,7 @@ const headers = {
   Authorization: token,
 };
 
-export const get = (bookId) =>
-  fetch(`${api}/books/${bookId}`, { headers })
-    .then((res) => res.json())
-    .then((data) => data.book);
-
+/** Returns all books currently on the user's shelves. */
 export const getAll = () =>
   fetch(`${api}/books`, { headers })
     .then((res) => res.json())
@@ -29,6 +24,11 @@ export const update = (book, shelf) =>
     body: JSON.stringify({ shelf }),
   }).then((res) => res.json());
 
+/**
+ * Searches the catalogue for books matching `query`.
+ * `maxResults` caps the number of results returned (max 20).
+ * Returns an array of book objects, or an empty array on no match.
+ */
 export const search = (query, maxResults) =>
   fetch(`${api}/search`, {
     method: "POST",

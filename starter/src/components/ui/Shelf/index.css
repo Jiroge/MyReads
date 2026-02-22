@@ -1,0 +1,79 @@
+/* ── Glass panel ── */
+.home-shelf {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: var(--color-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: panelFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.08s both;
+}
+
+/* ── Book grid ── */
+.home-shelf-books {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 12px;
+  overflow-y: auto;
+  padding-bottom: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Prevent long titles from blowing out the grid column width */
+.home-shelf-books .book-card {
+  min-width: 0;
+}
+
+/* ── Custom scrollbar ── */
+.home-shelf-books::-webkit-scrollbar {
+  width: 4px;
+}
+
+.home-shelf-books::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.home-shelf-books::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+.home-shelf-books::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ── Responsive overrides ── */
+
+/* Desktop: larger cards when there's more horizontal space */
+@media (min-width: 1200px) {
+  .home-shelf-books {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 14px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .home-shelf {
+    padding: 10px;
+  }
+
+  .home-shelf-books {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .home-shelf-books {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}

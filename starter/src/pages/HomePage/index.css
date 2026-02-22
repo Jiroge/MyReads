@@ -1,0 +1,194 @@
+/* ── Glass context & CSS variable overrides ── */
+.home-page {
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: transparent;
+  height: 100vh;
+  overflow: hidden;
+  /* Re-scope design tokens to glass-appropriate semi-transparent values.
+     Child components (Shelf, CustomShelf) inherit these automatically. */
+  --color-text: rgba(255, 255, 255, 0.85);
+  --color-text-secondary: rgba(255, 255, 255, 0.55);
+  --color-text-muted: rgba(255, 255, 255, 0.38);
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-alt: rgba(255, 255, 255, 0.025);
+  --color-border: rgba(255, 255, 255, 0.07);
+  --color-hover-bg-subtle: rgba(255, 255, 255, 0.05);
+  --color-hover-bg: rgba(255, 255, 255, 0.08);
+  --color-hover-bg-danger: rgba(239, 83, 80, 0.12);
+  --shadow-sm: 0 4px 24px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Search bar (navigates to /search on click) ── */
+.home-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 0.85em;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  animation: panelFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.home-search-bar:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.home-search-icon {
+  flex-shrink: 0;
+}
+
+/* ── Section title (shared by Shelf and CustomShelf headings) ───── */
+.home-section-title {
+  margin: 0 0 8px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Page grid rows ─── */
+.home-top-row {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.home-split-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── My Booklists panel ── */
+.home-custom-section {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: var(--color-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: panelFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.15s both;
+}
+
+.home-custom-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 8px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Shared empty-state message ── */
+.home-custom-empty {
+  padding: 16px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.8em;
+}
+
+/* ── Custom section header (title + Add button on same row) ─── */
+.home-custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+/* Remove the bottom border from the title when it's inline in the header */
+.home-custom-header .home-section-title {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.home-custom-add-btn {
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 0.72em;
+  cursor: pointer;
+  color: var(--color-primary);
+  font-weight: 500;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.home-custom-add-btn:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ── Responsive breakpoints ── */
+
+/* Tablet — stack top row vertically */
+@media (max-width: 1200px) {
+  .home-top-row {
+    grid-template-columns: 1fr;
+  }
+  .home-split-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Mobile — single column, allow natural scroll */
+@media (max-width: 768px) {
+  .home-page {
+    padding: 10px 12px;
+    gap: 10px;
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
+  .home-top-row {
+    grid-template-columns: 1fr;
+    flex: none;
+  }
+
+  .home-split-row {
+    grid-template-columns: 1fr;
+    flex: none;
+  }
+}
+
+/* ── Light mode glass overrides ──── */
+.sidebar-layout[data-mode="light"] .home-page {
+  --color-text: #1d1d1f;
+  --color-text-secondary: #6e6e73;
+  --color-text-muted: #a1a1a6;
+  --color-surface: rgba(255, 255, 255, 0.42);
+  --color-surface-alt: rgba(255, 255, 255, 0.28);
+  --color-border: rgba(0, 0, 0, 0.07);
+  --color-hover-bg-subtle: rgba(0, 0, 0, 0.04);
+  --color-hover-bg: rgba(0, 0, 0, 0.06);
+  --color-hover-bg-danger: #fdecea;
+  --shadow-sm: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.1);
+}

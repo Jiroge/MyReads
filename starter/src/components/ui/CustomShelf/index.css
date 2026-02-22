@@ -1,0 +1,165 @@
+/* ── Accordion item ─── */
+.home-tab {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: box-shadow 0.2s ease;
+}
+
+.home-tab:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Header (toggle button) ── */
+.home-tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: var(--color-surface-alt);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.home-tab-header:hover {
+  background: var(--color-hover-bg-subtle);
+}
+
+/* Shows a bottom border to visually separate header from open content */
+.home-tab-header--active {
+  background: var(--color-hover-bg-subtle);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.home-tab-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* Rotates to point down when the accordion is open */
+.home-tab-arrow {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-tab-arrow--open {
+  transform: rotate(90deg);
+}
+
+.home-tab-name {
+  font-size: 0.8em;
+  font-weight: 500;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Info icon shown when the list has a description; tooltip via HTML title */
+.home-tab-info-icon {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+}
+
+/* Book count badge */
+.home-tab-count {
+  flex-shrink: 0;
+  font-size: 0.65em;
+  color: var(--color-text-muted);
+  background: var(--color-hover-bg-subtle);
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* ── Accordion content ── */
+.home-tab-content {
+  padding: 8px 10px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+/* Edit / Remove action buttons row */
+.home-tab-actions {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+/* ── Book list ── */
+.home-tab-booklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Clicking a book item opens BookDetailModal */
+.home-tab-book-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: var(--color-surface-alt);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.home-tab-book-item:hover {
+  background: var(--color-hover-bg-subtle);
+  border-color: var(--color-border);
+}
+
+.home-tab-book-title {
+  font-size: 0.78em;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.home-tab-book-authors {
+  font-size: 0.68em;
+  color: var(--color-text-muted);
+}
+
+/* ── Edit / Remove buttons ─── */
+.home-shelf-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.7em;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-weight: 450;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.home-shelf-btn:hover {
+  background: var(--color-hover-bg-subtle);
+  border-color: var(--color-text-muted);
+}
+
+/* Danger variant for the Remove button */
+.home-shelf-btn--danger {
+  color: #d32f2f;
+  border-color: rgba(211, 47, 47, 0.3);
+}
+
+.home-shelf-btn--danger:hover {
+  background: var(--color-hover-bg-danger);
+  border-color: #d32f2f;
+}

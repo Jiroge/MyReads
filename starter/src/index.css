@@ -1,13 +1,103 @@
 html {
   box-sizing: border-box;
+  font-size: clamp(12px, 1.4vw, 15px); /* fluid base size: scales between 12–15 px */
+  scroll-behavior: smooth;
+  height: 100%;
 }
+
 *,
 *:before,
 *:after {
   box-sizing: inherit;
 }
+
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app {
+  background: var(--color-bg);
+}
+
+/* ── Smooth theme transitions ──
+   Excluded: login background covers — they scroll continuously and must not
+   be affected by the 0.2 s color transition which would cause flickering. */
+*:not(.login-bg-cover):not(.login-bg-row) {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* ── Shared animation keyframes ──
+   Defined globally so all pages and panels can reference them without
+   duplicating @keyframes blocks in individual CSS files. */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── CSS custom properties (design tokens) ──
+   Default values reflect the light mode / green theme.
+   SidebarLayout's useEffect overwrites these at runtime. */
+:root {
+  /* ── Colour palette ── */
+  --color-primary: #2e7c31;
+  --color-dark: #256428;
+  --color-accent: #60ac5d;
+
+  /* ── Surface & background ── */
+  --color-bg: #f5f5f7;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f9f9fb;
+
+  /* ── Text ── */
+  --color-text: #1d1d1f;
+  --color-text-secondary: #6e6e73;
+  --color-text-muted: #a1a1a6;
+
+  /* ── Borders & interactive states ── */
+  --color-border: #e5e5ea;
+  --color-hover-bg: #e8e8ed;
+  --color-hover-bg-subtle: #f2f2f7;
+  --color-hover-bg-danger: #fdecea;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  /* ── Border radii ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* ── Base variables ──
+     These mirror the regular --color-* set but are NEVER re-scoped by glass
+     components.  Overlays (shelf-menu, modals) read these to restore opaque
+     colours even when rendered inside a semi-transparent glass panel that
+     has locally overridden --color-surface etc. */
+  --color-base-surface: #ffffff;
+  --color-base-surface-alt: #f9f9fb;
+  --color-base-text: #1d1d1f;
+  --color-base-text-secondary: #6e6e73;
+  --color-base-text-muted: #a1a1a6;
+  --color-base-border: #e5e5ea;
+  --color-base-hover-bg-subtle: #f2f2f7;
 }
