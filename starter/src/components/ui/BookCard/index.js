@@ -50,7 +50,13 @@ function BookCard({ book, shelfKey, onMove }) {
         <div className="book-top">
           <div
             className="book-cover"
-            style={{ backgroundImage: `url("${book.coverUrl}")` }}
+            style={{
+              backgroundImage: book.imageLinks
+                ? `url("${book.imageLinks.thumbnail}")`
+                : book.coverUrl
+                  ? `url("${book.coverUrl}")`
+                  : "none",
+            }}
           ></div>
           <div className="book-shelf-changer" ref={menuRef}>
             <button
@@ -95,7 +101,9 @@ function BookCard({ book, shelfKey, onMove }) {
                     Read
                   </button>
                 )}
-                {/* Custom booklists — exclude the one this book already belongs to */}
+                <button className="shelf-menu-item shelf-menu-item--none" onClick={() => handleSelect("none")}>
+                  None
+                </button>
                 {booklists
                   .filter((list) => shelfKey !== `custom-${list.id}`)
                   .map((list) => (
@@ -112,7 +120,9 @@ function BookCard({ book, shelfKey, onMove }) {
           </div>
         </div>
         <div className="book-title">{book.title}</div>
-        <div className="book-authors">{book.authors}</div>
+        <div className="book-authors">
+          {Array.isArray(book.authors) ? book.authors.join(", ") : book.authors}
+        </div>
       </div>
     </div>
   );

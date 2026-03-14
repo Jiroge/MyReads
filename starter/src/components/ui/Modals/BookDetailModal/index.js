@@ -22,12 +22,20 @@ function BookDetailModal({ open, book, shelfKey, onMove, onClose }) {
         <div className="book-detail-cover">
           <div
             className="book-detail-cover-img"
-            style={{ backgroundImage: `url("${book.coverUrl}")` }}
+            style={{
+              backgroundImage: book.imageLinks
+                ? `url("${book.imageLinks.thumbnail}")`
+                : book.coverUrl
+                  ? `url("${book.coverUrl}")`
+                  : "none",
+            }}
           />
         </div>
         <div className="book-detail-info">
           <h3 className="book-detail-title">{book.title}</h3>
-          <p className="book-detail-authors">{book.authors}</p>
+          <p className="book-detail-authors">
+            {Array.isArray(book.authors) ? book.authors.join(", ") : book.authors}
+          </p>
         </div>
         {onMove && (
           <div className="book-detail-move">

@@ -17,7 +17,12 @@ function Shelf({ title, shelfKey, books, onMove }) {
       {books.length > 0 ? (
         <div className="home-shelf-books">
           {books.map((book) => (
-            <BookCard key={book.title} book={book} shelfKey={shelfKey} onMove={onMove} />
+            <BookCard
+              key={book.id || book.title}
+              book={book}
+              shelfKey={shelfKey}
+              onMove={onMove}
+            />
           ))}
         </div>
       ) : (
