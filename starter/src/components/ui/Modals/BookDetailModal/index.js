@@ -1,20 +1,12 @@
 /**
  * BookDetailModal — shows a book's cover, title, and authors, plus a
- * row of buttons to move it to any other shelf or booklist.
-*/
-import { useBooklist } from "../../../contexts/Booklist";
+ * row of buttons to move it to any other shelf.
+ */
 import Modal from "..";
 import "./index.css";
 
 function BookDetailModal({ open, book, shelfKey, onMove, onClose }) {
-  const { booklists } = useBooklist();
-
-  // Guard: Modal renders nothing when book is null (e.g. before first click).
   if (!book) return null;
-
-  // Strip the "custom-" prefix to get the raw list id so we can filter it
-  // out of the move options — no point offering "move to where it already is".
-  const currentListId = shelfKey ? shelfKey.replace("custom-", "") : null;
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -25,9 +17,7 @@ function BookDetailModal({ open, book, shelfKey, onMove, onClose }) {
             style={{
               backgroundImage: book.imageLinks
                 ? `url("${book.imageLinks.thumbnail}")`
-                : book.coverUrl
-                  ? `url("${book.coverUrl}")`
-                  : "none",
+                : "none",
             }}
           />
         </div>
@@ -41,27 +31,24 @@ function BookDetailModal({ open, book, shelfKey, onMove, onClose }) {
           <div className="book-detail-move">
             <span className="book-detail-move-label">Move to...</span>
             <div className="book-detail-move-options">
-              <button className="book-detail-move-btn" onClick={() => onMove(book, "currentlyReading")}>
-                Currently Reading
+              {shelfKey !== "currentlyReading" && (
+                <button className="book-detail-move-btn" onClick={() => onMove(book, "currentlyReading")}>
+                  Currently Reading
+                </button>
+              )}
+              {shelfKey !== "wantToRead" && (
+                <button className="book-detail-move-btn" onClick={() => onMove(book, "wantToRead")}>
+                  Want to Read
+                </button>
+              )}
+              {shelfKey !== "read" && (
+                <button className="book-detail-move-btn" onClick={() => onMove(book, "read")}>
+                  Read
+                </button>
+              )}
+              <button className="book-detail-move-btn" onClick={() => onMove(book, "none")}>
+                None
               </button>
-              <button className="book-detail-move-btn" onClick={() => onMove(book, "wantToRead")}>
-                Want to Read
-              </button>
-              <button className="book-detail-move-btn" onClick={() => onMove(book, "read")}>
-                Read
-              </button>
-              {/* Only show custom booklists the book isn't already in */}
-              {booklists
-                .filter((bl) => bl.id !== currentListId)
-                .map((bl) => (
-                  <button
-                    key={bl.id}
-                    className="book-detail-move-btn"
-                    onClick={() => onMove(book, `custom-${bl.id}`)}
-                  >
-                    {bl.name}
-                  </button>
-                ))}
             </div>
           </div>
         )}

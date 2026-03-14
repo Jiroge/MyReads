@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import * as BooksAPI from "../../api/BooksAPI";
-import { useBooklist } from "../../components/contexts/Booklist";
 import "./index.css";
 
 function SearchPage() {
   const navigate = useNavigate();
-  const { booklists, addBookToList, removeBookFromList } = useBooklist();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [shelvedBooks, setShelvedBooks] = useState([]);
@@ -24,7 +22,7 @@ function SearchPage() {
     });
   }, []);
 
-  // Debounced search — waits 500ms after the user stops typing.
+  // Debounced search — waits 300ms after the user stops typing.
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -74,45 +72,16 @@ function SearchPage() {
   }, [shelvedBooks]);
 
   const getBookCurrentShelf = useCallback((book) => {
-    const shelf = shelfMap.get(book.id);
-    if (shelf) return shelf;
-    for (const list of booklists) {
-      if (list.books.some((b) => b.title === book.title)) return `custom-${list.id}`;
-    }
-    return null;
-  }, [shelfMap, booklists]);
+    return shelfMap.get(book.id) || null;
+  }, [shelfMap]);
 
   /** Adds a book to the chosen shelf using BooksAPI.update(). */
   const addToShelf = useCallback((book, shelfKey) => {
-    const currentShelf = getBookCurrentShelf(book);
-
-    // Remove from current custom list if applicable.
-    if (currentShelf && currentShelf.startsWith("custom-")) {
-      removeBookFromList(currentShelf.replace("custom-", ""), book.title);
-    }
-
     if (shelfKey === "none") {
-      // Remove from standard shelf via API.
       BooksAPI.update(book, "none").then(() => {
         setShelvedBooks((prev) => prev.filter((b) => b.id !== book.id));
       });
-    } else if (shelfKey.startsWith("custom-")) {
-      // Move to custom booklist (localStorage only).
-      if (currentShelf && !currentShelf.startsWith("custom-")) {
-        BooksAPI.update(book, "none").then(() => {
-          setShelvedBooks((prev) => prev.filter((b) => b.id !== book.id));
-        });
-      }
-      const bookData = {
-        title: book.title,
-        authors: book.authors ? book.authors.join(", ") : "Unknown",
-        coverUrl: book.imageLinks ? book.imageLinks.thumbnail : "",
-        width: 90,
-        height: 135,
-      };
-      addBookToList(shelfKey.replace("custom-", ""), bookData);
     } else {
-      // Move to standard shelf via API.
       BooksAPI.update(book, shelfKey).then(() => {
         setShelvedBooks((prev) => {
           const filtered = prev.filter((b) => b.id !== book.id);
@@ -124,7 +93,7 @@ function SearchPage() {
     setAddedBookId(book.id);
     setTimeout(() => setAddedBookId(null), 900);
     setOpenMenu(null);
-  }, [getBookCurrentShelf, removeBookFromList, addBookToList]);
+  }, []);
 
   return (
     <div className="search-page">
@@ -204,7 +173,7 @@ function SearchPage() {
                         >
                           Read
                         </button>
-                        {currentShelf && !currentShelf.startsWith("custom-") && (
+                        {currentShelf && (
                           <button
                             className="shelf-menu-item shelf-menu-item--none"
                             onClick={() => addToShelf(book, "none")}
@@ -212,15 +181,6 @@ function SearchPage() {
                             None
                           </button>
                         )}
-                        {booklists.map((list) => (
-                          <button
-                            key={list.id}
-                            className={`shelf-menu-item${currentShelf === `custom-${list.id}` ? " shelf-menu-item--active" : ""}`}
-                            onClick={() => addToShelf(book, `custom-${list.id}`)}
-                          >
-                            {list.name}
-                          </button>
-                        ))}
                       </div>
                     )}
                   </div>

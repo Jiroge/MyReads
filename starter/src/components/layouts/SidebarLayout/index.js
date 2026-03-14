@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useSettings } from "../../contexts/Settings";
 import { useAuth } from "../../contexts/Auth";
-import { useBooklist } from "../../contexts/Booklist";
 import "./index.css";
 
 /**
@@ -21,19 +20,12 @@ function SidebarLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, mode, colors, modes } = useSettings();
   const { username, logout } = useAuth();
-  const { clearBooklists } = useBooklist();
   const navigate = useNavigate();
 
-  /**
-   * Booklists are user-specific, so clear them before logging out
-   * to prevent them from showing up for the next user on the same device.
-   * Auth.logout() handles the rest of localStorage cleanup.
-   */
   const handleLogout = useCallback(() => {
-    clearBooklists();
     logout();
     navigate("/login");
-  }, [clearBooklists, logout, navigate]);
+  }, [logout, navigate]);
 
   /**
    * Inject theme and mode values as CSS custom properties on :root.

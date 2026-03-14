@@ -2,24 +2,16 @@
  * BookCard — displays a single book (cover, title, authors) with a
  * shelf-changer button that opens a dropdown menu.
  *
- * The dropdown lists every destination shelf the book can move to,
- * automatically excluding the shelf it currently lives on.
- *
  * Props:
- *   book      — { title, authors, coverUrl }
- *   shelfKey  — current shelf identifier:
- *                 "currentlyReading" | "wantToRead" | "read" | "custom-{id}"
+ *   book      — API book object with id, title, authors[], imageLinks
+ *   shelfKey  — "currentlyReading" | "wantToRead" | "read"
  *   onMove(book, fromShelf, toShelf) — called when the user picks a destination
  */
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useBooklist } from "../../contexts/Booklist";
 import "./index.css";
 
 function BookCard({ book, shelfKey, onMove }) {
-  const { booklists } = useBooklist();
   const [open, setOpen] = useState(false);
-  // When the menu would overflow the right edge of the shelf grid it flips
-  // to open leftward instead.
   const [flipLeft, setFlipLeft] = useState(false);
   const menuRef = useRef(null);
   const btnRef = useRef(null);
@@ -53,9 +45,7 @@ function BookCard({ book, shelfKey, onMove }) {
             style={{
               backgroundImage: book.imageLinks
                 ? `url("${book.imageLinks.thumbnail}")`
-                : book.coverUrl
-                  ? `url("${book.coverUrl}")`
-                  : "none",
+                : "none",
             }}
           ></div>
           <div className="book-shelf-changer" ref={menuRef}>
@@ -64,9 +54,6 @@ function BookCard({ book, shelfKey, onMove }) {
               className="shelf-changer-btn"
               onClick={() => {
                 if (!open && btnRef.current) {
-                  // Check how much space is to the right of the button.
-                  // If opening rightward would exceed the shelf container's
-                  // right edge, flip the menu to open leftward instead.
                   const rect = btnRef.current.getBoundingClientRect();
                   const container = btnRef.current.closest(".home-shelf-books");
                   const rightEdge = container
@@ -85,7 +72,6 @@ function BookCard({ book, shelfKey, onMove }) {
             {open && (
               <div className={`shelf-menu${flipLeft ? " shelf-menu--left" : ""}`}>
                 <div className="shelf-menu-header">Move to...</div>
-                {/* Render every shelf option except the one the book is already on */}
                 {shelfKey !== "currentlyReading" && (
                   <button className="shelf-menu-item" onClick={() => handleSelect("currentlyReading")}>
                     Currently Reading
@@ -104,17 +90,6 @@ function BookCard({ book, shelfKey, onMove }) {
                 <button className="shelf-menu-item shelf-menu-item--none" onClick={() => handleSelect("none")}>
                   None
                 </button>
-                {booklists
-                  .filter((list) => shelfKey !== `custom-${list.id}`)
-                  .map((list) => (
-                    <button
-                      key={list.id}
-                      className="shelf-menu-item"
-                      onClick={() => handleSelect(`custom-${list.id}`)}
-                    >
-                      {list.name}
-                    </button>
-                  ))}
               </div>
             )}
           </div>

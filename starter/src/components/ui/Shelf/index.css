@@ -10,29 +10,25 @@
   box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   animation: panelFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.08s both;
 }
 
-/* ── Book grid ── */
+/* ── Book grid — horizontal scrolling row ── */
 .home-shelf-books {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 12px;
-  overflow-y: auto;
-  padding-bottom: 4px;
-  flex: 1;
-  min-height: 0;
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
 }
 
-/* Prevent long titles from blowing out the grid column width */
 .home-shelf-books .book-card {
-  min-width: 0;
+  flex-shrink: 0;
+  width: 128px;
 }
 
 /* ── Custom scrollbar ── */
 .home-shelf-books::-webkit-scrollbar {
-  width: 4px;
+  height: 4px;
 }
 
 .home-shelf-books::-webkit-scrollbar-track {
@@ -48,15 +44,7 @@
   background: var(--color-text-muted);
 }
 
-/* ── Responsive overrides ── */
-
-/* Desktop: larger cards when there's more horizontal space */
-@media (min-width: 1200px) {
-  .home-shelf-books {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 14px;
-  }
-}
+/* ── Responsive ── */
 
 /* Mobile */
 @media (max-width: 768px) {
@@ -64,16 +52,14 @@
     padding: 10px;
   }
 
-  .home-shelf-books {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+  .home-shelf-books .book-card {
+    width: 110px;
   }
 }
 
 /* Small mobile */
 @media (max-width: 480px) {
-  .home-shelf-books {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+  .home-shelf-books .book-card {
+    width: 100px;
   }
 }

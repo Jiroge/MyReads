@@ -1,10 +1,9 @@
 /**
  * App.js — Root component
  *
- * Sets up React Router and wraps the whole tree in three context providers:
+ * Sets up React Router and wraps the whole tree in context providers:
  *   AuthProvider     → username / login / logout
  *   SettingsProvider → theme (color) + mode (light/dark)
- *   BooklistProvider → custom booklists with CRUD
  *
  * Route structure:
  *   /login          → LoginPage   (public)
@@ -15,7 +14,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AuthProvider, useAuth } from "./components/contexts/Auth";
 import { SettingsProvider } from "./components/contexts/Settings";
-import { BooklistProvider } from "./components/contexts/Booklist";
 import SidebarLayout from "./components/layouts/SidebarLayout";
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
@@ -37,7 +35,6 @@ function App() {
       <Router>
         <AuthProvider>
           <SettingsProvider>
-            <BooklistProvider>
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route element={<ProtectedRoute />}>
@@ -48,7 +45,6 @@ function App() {
                 <Route path="/search" element={<SearchPage />} />
               </Route>
             </Routes>
-            </BooklistProvider>
           </SettingsProvider>
         </AuthProvider>
       </Router>
