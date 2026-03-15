@@ -1,94 +1,66 @@
 # MyReads Project
 
-This is the starter template for the final assessment project for Udacity's React Fundamentals course. The goal of this template is to save you time by providing a static example of the CSS and HTML markup that may be used, but without any of the React code that is needed to complete the project. If you choose to start with this template, your job will be to add interactivity to the app by refactoring the static code in this template.
+A bookshelf app built with React that allows users to categorize books into three shelves: **Currently Reading**, **Want to Read**, and **Read**. Users can search for new books and add them to their shelves. Built as the final assessment project for Udacity's React Fundamentals course.
 
-Of course, you are free to start this project from scratch if you wish! Just be sure to use [Create React App](https://reactjs.org/docs/create-a-new-react-app.html) to bootstrap the project.
-
-## TL;DR
-
-To get started developing right away:
-
-- install all project dependencies with `npm install`
-- start the development server with `npm start`
-
-## What You're Getting
+## Getting Started
 
 ```bash
-├── CONTRIBUTING.md
-├── README.md - This file.
-├── SEARCH_TERMS.md # The whitelisted short collection of available search terms for you to use with your app.
-├── package.json # npm package manager file. It's unlikely that you'll need to modify this.
-├── public
-│   ├── favicon.ico # React Icon, You may change if you wish.
-│   └── index.html # DO NOT MODIFY
-└── src
-    ├── App.css # Styles for your app. Feel free to customize this as you desire.
-    ├── App.js # This is the root of your app. Contains static HTML right now.
-    ├── App.test.js # Used for testing. Provided with Create React App. Testing is encouraged, but not required.
-    ├── BooksAPI.js # A JavaScript API for the provided Udacity backend. Instructions for the methods are below.
-    ├── icons # Helpful images for your app. Use at your discretion.
-    │   ├── add.svg
-    │   ├── arrow-back.svg
-    │   └── arrow-drop-down.svg
-    ├── index.css # Global styles. You probably won't need to change anything here.
-    └── index.js # You should not need to modify this file. It is used for DOM rendering only.
+npm install
+npm start
 ```
 
-Remember that good React design practice is to create new JS files for each component and use import/require statements to include them where they are needed.
+The app will run at [http://localhost:3000](http://localhost:3000).
 
-## Backend Server
+## Features
 
-To simplify your development process, we've provided a backend server for you to develop against. The provided file [`BooksAPI.js`](src/BooksAPI.js) contains the methods you will need to perform necessary operations on the backend:
+- View books organized into three shelves
+- Move books between shelves using a dropdown selector
+- Search for new books and add them to a shelf
+- Remove books from all shelves
+- User authentication (username-based login)
+- Customizable color theme and light/dark mode
 
-- [`getAll`](#getall)
-- [`update`](#update)
-- [`search`](#search)
+## Project Structure
 
-### `getAll`
-
-Method Signature:
-
-```js
-getAll();
+```
+src/
+├── api/
+│   └── BooksAPI.js            # Udacity backend API (getAll, update, search)
+├── components/
+│   ├── contexts/
+│   │   ├── Auth/              # Authentication context (login/logout)
+│   │   └── Settings/          # Theme & mode context
+│   ├── layouts/
+│   │   └── SidebarLayout/     # Main layout with sidebar navigation
+│   └── ui/
+│       ├── BookCard/          # Single book display with shelf-changer menu
+│       ├── Modals/            # Base Modal + BookDetailModal
+│       └── Shelf/             # Shelf component rendering a row of BookCards
+├── pages/
+│   ├── HomePage/              # Main page — three shelves via BooksAPI.getAll()
+│   ├── LoginPage/             # Login screen with animated book cover background
+│   ├── SearchPage/            # Search page via BooksAPI.search()
+│   └── SettingPage/           # Theme color and light/dark mode settings
+├── themes/
+│   └── index.js               # Color themes and light/dark mode definitions
+├── App.js                     # Root component with routing and context providers
+└── index.js                   # Entry point
 ```
 
-- Returns a Promise which resolves to a JSON object containing a collection of book objects.
-- This collection represents the books currently in the bookshelves in your app.
+## Backend API
 
-### `update`
+The app uses the Udacity Books API via [`src/api/BooksAPI.js`](src/api/BooksAPI.js):
 
-Method Signature:
+| Method | Description |
+|--------|-------------|
+| `getAll()` | Returns all books currently on the user's shelves |
+| `update(book, shelf)` | Moves a book to a shelf (`"currentlyReading"`, `"wantToRead"`, `"read"`, or `"none"`) |
+| `search(query, maxResults)` | Searches the catalogue (max 20 results) |
 
-```js
-update(book, shelf);
-```
+**Note:** The search API only supports a fixed set of terms listed in [SEARCH_TERMS.md](SEARCH_TERMS.md).
 
-- book: `<Object>` containing at minimum an `id` attribute
-- shelf: `<String>` contains one of ["wantToRead", "currentlyReading", "read"]
-- Returns a Promise which resolves to a JSON object containing the response data of the POST request
+## Built With
 
-### `search`
-
-Method Signature:
-
-```js
-search(query);
-```
-
-- query: `<String>`
-- Returns a Promise which resolves to a JSON object containing a collection of a maximum of 20 book objects.
-- These books do not know which shelf they are on. They are raw results only. You'll need to make sure that books have the correct state while on the search page.
-
-## Important
-
-The backend API uses a fixed set of cached search results and is limited to a particular set of search terms, which can be found in [SEARCH_TERMS.md](SEARCH_TERMS.md). That list of terms are the _only_ terms that will work with the backend, so don't be surprised if your searches for Basket Weaving or Bubble Wrap don't come back with any results.
-
-## Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). You can find more information on how to perform common tasks [here](https://github.com/facebook/create-react-app/blob/main/packages/cra-template/template/README.md).
-
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+- [React](https://reactjs.org/) 17
+- [React Router](https://reactrouter.com/) v6
+- [Create React App](https://create-react-app.dev/)
