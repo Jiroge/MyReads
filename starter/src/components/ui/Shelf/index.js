@@ -1,12 +1,4 @@
-/**
- * Shelf — presentational component that renders a titled grid of BookCards.
- *
- * Props:
- *   title    — section heading string (e.g. "Currently Reading")
- *   shelfKey — passed through to each BookCard so it knows which shelf it's on
- *   books    — array of book objects to display
- *   onMove(book, fromShelf, toShelf) — relayed up to HomePage when a book is moved
- */
+import PropTypes from "prop-types";
 import BookCard from "../BookCard";
 import "./index.css";
 
@@ -31,5 +23,12 @@ function Shelf({ title, shelfKey, books, onMove }) {
     </div>
   );
 }
+
+Shelf.propTypes = {
+  title: PropTypes.string.isRequired,
+  shelfKey: PropTypes.oneOf(["currentlyReading", "wantToRead", "read"]).isRequired,
+  books: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onMove: PropTypes.func.isRequired,
+};
 
 export default Shelf;

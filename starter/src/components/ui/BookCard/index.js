@@ -1,13 +1,5 @@
-/**
- * BookCard — displays a single book (cover, title, authors) with a
- * shelf-changer button that opens a dropdown menu.
- *
- * Props:
- *   book      — API book object with id, title, authors[], imageLinks
- *   shelfKey  — "currentlyReading" | "wantToRead" | "read"
- *   onMove(book, fromShelf, toShelf) — called when the user picks a destination
- */
 import { useState, useRef, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 import "./index.css";
 
 function BookCard({ book, shelfKey, onMove }) {
@@ -16,7 +8,6 @@ function BookCard({ book, shelfKey, onMove }) {
   const menuRef = useRef(null);
   const btnRef = useRef(null);
 
-  // Close the menu when the user clicks anywhere outside it.
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -102,5 +93,18 @@ function BookCard({ book, shelfKey, onMove }) {
     </div>
   );
 }
+
+BookCard.propTypes = {
+  book: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    authors: PropTypes.arrayOf(PropTypes.string),
+    imageLinks: PropTypes.shape({
+      thumbnail: PropTypes.string,
+    }),
+  }).isRequired,
+  shelfKey: PropTypes.oneOf(["currentlyReading", "wantToRead", "read"]).isRequired,
+  onMove: PropTypes.func.isRequired,
+};
 
 export default BookCard;

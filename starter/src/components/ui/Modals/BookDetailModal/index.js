@@ -1,7 +1,4 @@
-/**
- * BookDetailModal — shows a book's cover, title, and authors, plus a
- * row of buttons to move it to any other shelf.
- */
+import PropTypes from "prop-types";
 import Modal from "..";
 import "./index.css";
 
@@ -61,5 +58,22 @@ function BookDetailModal({ open, book, shelfKey, onMove, onClose }) {
     </Modal>
   );
 }
+
+BookDetailModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  book: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    authors: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.string),
+      PropTypes.string,
+    ]),
+    imageLinks: PropTypes.shape({
+      thumbnail: PropTypes.string,
+    }),
+  }),
+  shelfKey: PropTypes.oneOf(["currentlyReading", "wantToRead", "read"]).isRequired,
+  onMove: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default BookDetailModal;
